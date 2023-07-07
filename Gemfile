@@ -12,6 +12,6 @@ group :test do
 end
 
 group :tools do
-  gem 'byebug'
+  gem 'byebug', platforms: :ruby
   gem 'rubocop', '~> 1.48.0'
 end
