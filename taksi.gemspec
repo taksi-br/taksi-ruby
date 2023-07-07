@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.authors     = ['Israel Trindade']
   spec.email       = ['irto@outlook.com']
 
-  spec.summary     = 'A tool to design backend driver for frontend'
-  spec.description = 'Useful tool to help build a backend over the concept of Backend For Frontend, or backend-driven frontends.'
+  spec.summary     = 'Application framework to build a backend driven UI in ruby'
+  spec.description = 'Useful toolset to build a backend over the concept of backend-driven UI (aka. backend for frontend).'
 
   spec.files         = Dir['CHANGELOG.md', 'LICENSE', 'README.md', 'Rakefile', 'dry-rails.gemspec', 'lib/**/*']
   spec.bindir        = 'bin'
@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.7.0'
 
   spec.add_development_dependency 'bundler'
+  spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec'
 
   spec.metadata['rubygems_mfa_required'] = 'true'
