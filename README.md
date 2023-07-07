@@ -1,0 +1,106 @@
+# Taksi [![Gem Version](https://badge.fury.io/rb/taksi.svg)](https://badge.fury.io/rb/taksi) [![CI](https://github.com/taksi-br/taksi-ruby/actions/workflows/ci.yml/badge.svg)](https://github.com/taksi-br/taksi-ruby/actions/workflows/ci.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/c3b7b1b64129408a946ce2c99a5b2706)](https://app.codacy.com/gh/taksi-br/taksi-ruby/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+
+Application framework to build a backend driven UI in ruby.
+
+## Considerations
+
+This repository are in its **very early days** and **not ready for production** yet. If you want to help or understand what it is, get a look over our inspirations on the links below:
+ - https://medium.com/movile-tech/backend-driven-development-ios-d1c726f2913b
+ - https://engineering.q42.nl/server-driven-ui-at-primephonic/
+ - https://www.youtube.com/watch?v=vuCfKjOwZdU
+
+Also, we're working in create a protocol documentation to explain the comunication details between frontend and backend.
+
+## Usage
+
+In Taksi, every interface are composed by 1 to many widgets, those widgets are feed by data provided from the interface definition.
+
+Defining a new widget:
+
+```ruby
+class Widgets::Users::ProfileResume
+  include Taksi::Widget.new('users/profile_resume')
+
+  content do
+    name Taksi::Dynamic
+
+    details do
+      age Taksi::Dynamic
+      email Taksi::Dynamic
+    end
+  end
+end
+```
+
+Defining a new interface (in this example a screen interface):
+
+```ruby
+class Screens::UserProfile
+  include Taksi::Screen.new('user_profile')
+
+  add Widgets::Users::ProfileResume, with: :profile_data
+
+  attr_accessor :user
+
+  def profile_data
+    {
+      name: user.name,
+      details: {
+        age: user.age,
+        email: user.email,
+      }
+    }
+  end
+end
+```
+
+From those definitions you can set up the skeleton or strip the data:
+
+```ruby
+user_profile = Screens::UserProfile.new
+user_profile.skeleton.as_json
+```
+
+Which provide us:
+
+```json
+{
+  "widgets": [
+    {
+      "identifier": "users/profile_resume",
+      "content": {
+        "name": { "type": "dynamic", "value": "widget$0.name" },
+        "details" {
+          "age": { "type": "dynamic", "value": "widget$0.details.age" },
+          "email": { "type": "dynamic", "value": "widget$0.details.email" }
+        }
+      }
+    }
+  ]
+}
+```
+
+Then, you can strip the data off:
+
+```ruby
+user_profile.user = User.find(logged_user_id)
+user_profile.data.as_json
+```
+
+```json
+{
+  "widget$0": {
+    "name": "Israel Trindade",
+    "details": {
+      "age": 29,
+      "email": "irto@outlook.com",
+    }
+  }
+}
+```
+
+## Supported Ruby versions
+
+This library officially supports the following Ruby versions:
+
+* MRI `>= 2.7`
