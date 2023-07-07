@@ -5,9 +5,9 @@ Application framework to build a backend driven UI in ruby.
 ## Considerations
 
 This repository are in its **very early days** and **not ready for production** yet. If you want to help or understand what it is, get a look over our inspirations on the links below:
- - https://medium.com/movile-tech/backend-driven-development-ios-d1c726f2913b
- - https://engineering.q42.nl/server-driven-ui-at-primephonic/
- - https://www.youtube.com/watch?v=vuCfKjOwZdU
+  - https://medium.com/movile-tech/backend-driven-development-ios-d1c726f2913b
+  - https://engineering.q42.nl/server-driven-ui-at-primephonic/
+  - https://www.youtube.com/watch?v=vuCfKjOwZdU
 
 Also, we're working in create a protocol documentation to explain the comunication details between frontend and backend.
 
@@ -103,4 +103,4 @@ user_profile.data.as_json
 
 This library officially supports the following Ruby versions:
 
-* MRI `>= 2.7`
+  * MRI `>= 2.7`
