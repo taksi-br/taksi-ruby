@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    paths:
+      - ".github/workflows/ci.yml"
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Test (${{ matrix.ruby-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: [2.6, 2.7, '3.0', 3.1, 3.2, jruby-9.4.0.0, truffleruby-head]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true
+    - name: Run all tests
+      run: bundle exec rspec
+
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish
+    needs: test
+    if: contains(github.ref, 'tags') && github.event_name == 'create'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1
+    - name: Publish gems to Rubygems
+      run: |
+        gem build *.gemspec
+        gem push *.gem
+      env:
+        GEM_HOST_API_KEY: ${{secrets.GEM_HOST_API_KEY}}
