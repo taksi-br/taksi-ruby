@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe ::Taksi::Widgets::ContentKey do
@@ -13,8 +15,8 @@ RSpec.describe ::Taksi::Widgets::ContentKey do
     context '#as_json' do
       it 'serializes correctly' do
         expect(subject.as_json).to eq({
-          dummy: { type: 'static', value: 'Static Random Value' }
-        })
+                                        dummy: {type: 'static', value: 'Static Random Value'}
+                                      })
       end
     end
   end
@@ -25,8 +27,8 @@ RSpec.describe ::Taksi::Widgets::ContentKey do
     context '#as_json' do
       it 'serializes correctly' do
         expect(subject.as_json).to eq({
-          dummy: { type: 'dynamic', value: 'dynamic_path' }
-        })
+                                        dummy: {type: 'dynamic', value: 'dynamic_path'}
+                                      })
       end
 
       context 'with empty path' do
@@ -34,8 +36,8 @@ RSpec.describe ::Taksi::Widgets::ContentKey do
 
         it 'creates a parameter path' do
           expect(subject.as_json).to eq({
-            dummy: { type: 'dynamic', value: 'widget$0.dummy' }
-          })
+                                          dummy: {type: 'dynamic', value: 'widget$0.dummy'}
+                                        })
         end
       end
     end

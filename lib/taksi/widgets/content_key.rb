@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Taksi
   module Widgets
     class ContentKey
@@ -8,7 +10,7 @@ module Taksi
         @key = key.to_sym
         @parent = parent
 
-        @value = args.shift.new(skeleton, full_key, *args) if args.size > 0
+        @value = args.shift.new(skeleton, full_key, *args) if args.size.positive?
         @nested_keys = []
 
         instance_exec(&block) if block_given?
@@ -22,7 +24,7 @@ module Taksi
       end
 
       def fetch_from(data)
-        return data[key]  if parent.nil? || parent.root?
+        return data[key] if parent.nil? || parent.root?
 
         parent.fetch_from(data)[key]
       rescue NoMethodError
@@ -30,9 +32,9 @@ module Taksi
       end
 
       def as_json
-        return { key => @nested_keys.map(&:as_json).inject({}, &:merge) } if nested?
+        return {key => @nested_keys.map(&:as_json).inject({}, &:merge)} if nested?
 
-        { key => value.as_json }
+        {key => value.as_json}
       end
 
       def keys

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Taksi
   class Widget < ::Module
     attr_reader :identifier
@@ -36,7 +38,8 @@ module Taksi
       def initialize(page_definition, with: nil)
         @page_definition = page_definition
         @datasource = with
-        @skeleton = @page_definition.skeleton.create_widget(self.class.identifier, &self.class.content_builder)
+        @skeleton = @page_definition.skeleton.create_widget(self.class.identifier,
+                                                            &self.class.content_builder)
       end
 
       def data_for(page_instance)
@@ -61,7 +64,6 @@ module Taksi
 
         relative_object[setter_key] = content_key.fetch_from(data)
       end
-
     end
   end
 end

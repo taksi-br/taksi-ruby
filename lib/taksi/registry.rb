@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'forwardable'
 module Taksi
   class Registry
-
     include ::Singleton
 
     class << self

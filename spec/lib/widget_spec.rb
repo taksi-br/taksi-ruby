@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe ::Taksi::Widget do
@@ -32,9 +34,9 @@ RSpec.describe ::Taksi::Widget do
     it 'builds up a serializable skeleton' do
       expect(subject.skeleton).to be_kind_of(::Taksi::Widgets::Skeleton)
       expect(subject.skeleton.as_json).to eq({
-        identifier: 'dummy/widget',
-        content: {}
-      })
+                                               identifier: 'dummy/widget',
+                                               content: {}
+                                             })
     end
   end
 
@@ -52,13 +54,13 @@ RSpec.describe ::Taksi::Widget do
     it 'builds up a serializable skeleton' do
       expect(subject.skeleton).to be_kind_of(::Taksi::Widgets::Skeleton)
       expect(subject.skeleton.as_json).to eq({
-        identifier: 'dummy/widget',
-        content: {
-          type: { type: 'static', value: 'dummy_static_value' },
-          title: { type: 'dynamic', value: 'dynamic_value.path' },
-          # value: { type: 'parameter', value: 'dummy_parameter' },
-        }
-      })
+                                               identifier: 'dummy/widget',
+                                               content: {
+                                                 type: {type: 'static', value: 'dummy_static_value'},
+                                                 title: {type: 'dynamic', value: 'dynamic_value.path'}
+                                                 # value: { type: 'parameter', value: 'dummy_parameter' },
+                                               }
+                                             })
     end
   end
 
@@ -80,16 +82,16 @@ RSpec.describe ::Taksi::Widget do
     it 'builds up a serializable skeleton' do
       expect(subject.skeleton).to be_kind_of(::Taksi::Widgets::Skeleton)
       expect(subject.skeleton.as_json).to eq({
-        identifier: 'dummy/widget',
-        content: {
-          title: { type: 'dynamic', value: 'dynamic_value.path' },
-          nested: {
-            type: { type: 'static', value: 'dummy_static_value' },
-            title: { type: 'dynamic', value: 'dynamic_value.path' },
-            # value: { type: 'parameter', value: 'dummy_parameter' },
-          }
-        }
-      })
+                                               identifier: 'dummy/widget',
+                                               content: {
+                                                 title: {type: 'dynamic', value: 'dynamic_value.path'},
+                                                 nested: {
+                                                   type: {type: 'static', value: 'dummy_static_value'},
+                                                   title: {type: 'dynamic', value: 'dynamic_value.path'}
+                                                   # value: { type: 'parameter', value: 'dummy_parameter' },
+                                                 }
+                                               }
+                                             })
     end
   end
 end

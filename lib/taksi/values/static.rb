@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Taksi
   module Values
     class Static
@@ -10,7 +12,7 @@ module Taksi
       end
 
       def as_json
-        { type: 'static', value: value }
+        {type: 'static', value: value}
       end
 
       def dynamic?

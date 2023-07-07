@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module Taksi
   class Screen < ::Module
-
     attr_reader :page_name, :version_pattern, :alternatives
 
     def self.find(name, version, alternative: nil)
@@ -26,7 +27,7 @@ module Taksi
       attr_reader :widgets, :skeleton
 
       def find(version, alternative = nil)
-        ::Taksi::Registry.find(self.page_name, version, alternative)
+        ::Taksi::Registry.find(page_name, version, alternative)
       end
 
       def initiate(screen_definition)

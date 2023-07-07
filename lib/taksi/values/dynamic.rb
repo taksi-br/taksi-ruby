@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Taksi
   module Values
     class Dynamic
       attr_reader :widget, :name, :content_key
 
-      def initialize(widget, name, content_key=nil)
+      def initialize(widget, name, content_key = nil)
         @widget = widget
         @name = name
         @content_key = content_key
@@ -16,7 +18,7 @@ module Taksi
       end
 
       def as_json
-        { type: 'dynamic', value: path }
+        {type: 'dynamic', value: path}
       end
 
       def dynamic?

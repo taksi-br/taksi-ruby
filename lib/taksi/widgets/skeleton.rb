@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Taksi
   module Widgets
     class Skeleton
@@ -19,7 +21,7 @@ module Taksi
       end
 
       def as_json
-        { identifier: identifier }.tap do |json|
+        {identifier: identifier}.tap do |json|
           json.merge!(content.as_json)
         end
       end

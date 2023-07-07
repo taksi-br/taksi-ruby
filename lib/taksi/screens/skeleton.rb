@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Taksi
   module Screens
     class Skeleton
@@ -27,7 +29,7 @@ module Taksi
       end
 
       def as_json(*)
-        { widgets: @widget_skeletons.map(&:as_json) }
+        {widgets: @widget_skeletons.map(&:as_json)}
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -10,6 +12,6 @@ group :test do
 end
 
 group :tools do
-  gem 'rubocop', '~> 1.48.0'
   gem 'byebug'
+  gem 'rubocop', '~> 1.48.0'
 end
