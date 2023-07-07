@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'support/coverage'
+
+begin
+  require 'byebug'
+rescue LoadError; end
+
 require 'taksi'
 
 RSpec.configure do |config|
