@@ -3,26 +3,30 @@
 module Taksi
   module Values
     class Dynamic
-      attr_reader :widget, :name, :content_key
+      attr_reader :component, :name, :field
 
-      def initialize(widget, name, content_key = nil)
-        @widget = widget
+      def initialize(component, name, field = nil)
+        @component = component
         @name = name
-        @content_key = content_key
+        @field = field
       end
 
       def path
-        return content_key if content_key
+        return field if field
 
-        "#{widget.id}.#{name}"
+        "#{component.id}.#{name}"
       end
 
       def as_json
-        {type: 'dynamic', value: path}
+        nil
       end
 
       def dynamic?
         true
+      end
+
+      def static?
+        false
       end
     end
   end

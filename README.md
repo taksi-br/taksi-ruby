@@ -13,13 +13,13 @@ Also, we're working in create a protocol documentation to explain the comunicati
 
 ## Usage
 
-In Taksi, every interface are composed by 1 to many widgets, those widgets are feed by data provided from the interface definition.
+In Taksi, every interface are composed by 1 to many components, those components are feed by data provided from the interface definition.
 
-Defining a new widget:
+Defining a new component:
 
 ```ruby
-class Widgets::Users::ProfileResume
-  include Taksi::Widget.new('users/profile_resume')
+class Components::Users::ProfileResume
+  include Taksi::Component.new('users/profile_resume')
 
   content do
     name Taksi::Dynamic
@@ -32,13 +32,13 @@ class Widgets::Users::ProfileResume
 end
 ```
 
-Defining a new interface (in this example a screen interface):
+Defining a new interface (in this example a interface interface):
 
 ```ruby
-class Screens::UserProfile
-  include Taksi::Screen.new('user_profile')
+class Interfaces::UserProfile
+  include Taksi::Interface.new('user_profile')
 
-  add Widgets::Users::ProfileResume, with: :profile_data
+  add Components::Users::ProfileResume, with: :profile_data
 
   attr_accessor :user
 
@@ -57,7 +57,7 @@ end
 From those definitions you can set up the skeleton or strip the data:
 
 ```ruby
-user_profile = Screens::UserProfile.new
+user_profile = Interfaces::UserProfile.new
 user_profile.skeleton.as_json
 ```
 
@@ -65,14 +65,15 @@ Which provide us:
 
 ```json
 {
-  "widgets": [
+  "components": [
     {
-      "identifier": "users/profile_resume",
+      "name": "users/profile_resume",
+      "identifier": "component$0",
       "content": {
-        "name": { "type": "dynamic", "value": "widget$0.name" },
-        "details" {
-          "age": { "type": "dynamic", "value": "widget$0.details.age" },
-          "email": { "type": "dynamic", "value": "widget$0.details.email" }
+        "name": null,
+        "details": {
+          "age": null,
+          "email": null
         }
       }
     }
@@ -89,13 +90,18 @@ user_profile.data.as_json
 
 ```json
 {
-  "widget$0": {
-    "name": "Israel Trindade",
-    "details": {
-      "age": 29,
-      "email": "irto@outlook.com",
+  "interface_data": [
+    {
+      "identifier": "component$0",
+      "content": {
+        "name": "Israel Trindade",
+        "details": {
+          "age": 29,
+          "email": "irto@outlook.com",
+        }
+      }
     }
-  }
+  ]
 }
 ```
 
