@@ -7,14 +7,14 @@ require 'taksi/version'
 require 'taksi/values/dynamic'
 require 'taksi/values/static'
 
-require 'taksi/widget'
-require 'taksi/widgets/skeleton'
-require 'taksi/widgets/content_key'
+require 'taksi/component'
+require 'taksi/components/skeleton'
+require 'taksi/components/field'
 
 require 'taksi/registry'
 
-require 'taksi/screen'
-require 'taksi/screens/skeleton'
+require 'taksi/interface'
+require 'taksi/interfaces/skeleton'
 
 module Taksi
 end

@@ -3,20 +3,24 @@
 module Taksi
   module Values
     class Static
-      attr_reader :widget, :name, :value
+      attr_reader :component, :name, :value
 
-      def initialize(widget, name, value)
-        @widget = widget
+      def initialize(component, name, value)
+        @component = component
         @name = name
         @value = value
       end
 
       def as_json
-        {type: 'static', value: value}
+        value
       end
 
       def dynamic?
         false
+      end
+
+      def static?
+        true
       end
     end
   end

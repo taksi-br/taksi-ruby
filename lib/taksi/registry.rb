@@ -11,8 +11,8 @@ module Taksi
       def_delegators :instance, :find, :add, :clear!
     end
 
-    class ScreenNotFoundError < ::StandardError; end
-    class ScreenAltenativeNotFoundError < ::StandardError; end
+    class InterfaceNotFoundError < ::StandardError; end
+    class InterfaceAltenativeNotFoundError < ::StandardError; end
 
     def initialize
       clear!
@@ -21,36 +21,36 @@ module Taksi
     def add(klass, name)
       sym_name = name.to_sym
 
-      @screens[sym_name] ||= []
-      @screens[sym_name] << klass
+      @interfaces[sym_name] ||= []
+      @interfaces[sym_name] << klass
     end
 
     def clear!
-      @screens = {}
+      @interfaces = {}
     end
 
     def find(name, version, alternative = nil)
-      screens_from_name = @screens[name.to_sym]
+      interfaces_from_name = @interfaces[name.to_sym]
 
-      raise ScreenNotFoundError if screens_from_name.blank?
+      raise InterfaceNotFoundError if interfaces_from_name.nil?
 
       parsed_version = ::Gem::Version.new(version)
 
-      screen = screens_from_name.find do |screen|
-        next false unless screen.version_pattern.satisfied_by?(parsed_version)
+      found_interface = interfaces_from_name.find do |interface|
+        next false unless interface.version_pattern.satisfied_by?(parsed_version)
 
-        next true if alternative.blank?
+        next true if alternative.nil?
 
-        next true if screen.alternatives.blank?
+        next true if interface.alternatives.blank?
 
-        next true if screen.alternatives.include?(alternative)
+        next true if interface.alternatives.include?(alternative)
 
         false
       end
 
-      raise ScreenNotFoundError if screen.blank?
+      raise InterfaceNotFoundError if found_interface.nil?
 
-      screen
+      found_interface
     end
   end
 end
