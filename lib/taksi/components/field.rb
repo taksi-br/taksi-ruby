@@ -10,6 +10,8 @@ module Taksi
         @name = name.to_sym
         @parent = parent
 
+        raise 'You must provide a value or a block definition to build field' unless args.size.positive? || block_given?
+
         @value = args.shift.new(skeleton, name, *args) if args.size.positive?
         @nested_fields = []
 
@@ -23,6 +25,8 @@ module Taksi
         "#{parent.name}.#{name}"
       end
 
+      # Fetches the data for in `data` for the current field
+      # @return any
       def fetch_from(data)
         return value.as_json if value.static?
 
@@ -33,12 +37,17 @@ module Taksi
         raise NameError, "Couldn't fetch #{key.inspect} from data: #{data.inspect}"
       end
 
+      # Turns the field into his json representation
+      # The returned hash is compatible with the skeleton json specification
+      # @return Hash
       def as_json
         return {name => @nested_fields.map(&:as_json).inject({}, &:merge)} if nested?
 
         {name => value.as_json}
       end
 
+      # Builds up a interator over all fields included nested ones
+      # @returns Enumerable
       def fields
         Enumerator.new do |yielder|
           @nested_fields.each do |field|
@@ -59,13 +68,19 @@ module Taksi
         @parent.nil?
       end
 
+      def dynamic?
+        return @nested_fields.any?(&:dynamic?) if @value.nil?
+
+        @value.dynamic?
+      end
+
       def method_missing(name, *args, &block)
         return super if @defined
 
         @nested_fields << self.class.new(skeleton, name, *args, parent: self, &block)
       end
 
-      def respond_to_missing?(name)
+      def respond_to_missing?(name, *)
         return super if @defined
 
         true

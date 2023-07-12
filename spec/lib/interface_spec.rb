@@ -52,6 +52,7 @@ RSpec.describe ::Taksi::Interface do
                                          {
                                            name: 'dummy/component',
                                            identifier: 'component$0',
+                                           requires_data: true,
                                            content: {
                                              title: nil
                                            }

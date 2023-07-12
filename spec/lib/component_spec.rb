@@ -10,6 +10,8 @@ RSpec.describe ::Taksi::Component do
   before do
     class DummyComponent
       include ::Taksi::Component.new('dummy/component')
+
+      content { }
     end
 
     class DummyInterface
@@ -36,6 +38,7 @@ RSpec.describe ::Taksi::Component do
       expect(subject.skeleton.as_json).to eq({
                                                name: 'dummy/component',
                                                identifier: 'component$0',
+                                               requires_data: false,
                                                content: {}
                                              })
     end
@@ -57,6 +60,7 @@ RSpec.describe ::Taksi::Component do
       expect(subject.skeleton.as_json).to eq({
                                                name: 'dummy/component',
                                                identifier: 'component$0',
+                                               requires_data: true,
                                                content: {
                                                  type: 'dummy_static_value',
                                                  title: nil
@@ -84,6 +88,7 @@ RSpec.describe ::Taksi::Component do
       expect(subject.skeleton.as_json).to eq({
                                                name: 'dummy/component',
                                                identifier: 'component$0',
+                                               requires_data: true,
                                                content: {
                                                  title: nil,
                                                  nested: {
