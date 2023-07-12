@@ -18,25 +18,24 @@ module Taksi
         @nested_fields = []
 
         instance_exec(&block) if block_given?
-        @defined = true
       end
 
       def key
         return name if parent.nil? || parent.root?
 
-        "#{parent.name}.#{name}"
+        "#{parent.key}.#{name}"
       end
 
       # Fetches the data for in `data` for the current field
       # @return any
       def fetch_from(data)
-        return value.as_json if value.static?
+        return value.as_json if value&.static?
 
-        return data[name] if parent.nil? || parent.root?
+        return data.fetch(name) if parent.nil? || parent.root?
 
-        parent.fetch_from(data)[name]
-      rescue NoMethodError
-        raise NameError, "Couldn't fetch #{key.inspect} from data: #{data.inspect}"
+        parent.fetch_from(data).fetch(name)
+      rescue ::KeyError
+        raise ::KeyError, "Couldn't fetch #{key.inspect} from data: #{data.inspect}"
       end
 
       # Turns the field into his json representation
@@ -76,16 +75,22 @@ module Taksi
         @value.dynamic?
       end
 
-      def method_missing(name, *args, &block)
-        return super if @defined
-
-        @nested_fields << self.class.new(skeleton, name, *args, parent: self, &block)
+      def field(name, *args, &block)
+        self.class.new(skeleton, name, *args, parent: self, &block).tap do |new_field|
+          @nested_fields << new_field
+        end
       end
 
-      def respond_to_missing?(name, *)
-        return super if @defined
+      def nested(name, &block)
+        field(name, &block)
+      end
 
-        true
+      def static(name, value)
+        field(name, ::Taksi::Values::Static, value)
+      end
+
+      def dynamic(name)
+        field(name, ::Taksi::Values::Dynamic)
       end
     end
   end

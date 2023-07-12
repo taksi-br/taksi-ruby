@@ -73,7 +73,6 @@ module Taksi
       def load_data_from_key_to_object(data, field, obj)
         splitted_full_path = field.key.to_s.split('.')
         setter_key = splitted_full_path.pop
-        splitted_full_path.shift # remove content root key, as it makes no sense in data object
 
         relative_object = splitted_full_path.reduce(obj) do |memo, path_part|
           memo[path_part.to_sym] ||= {}

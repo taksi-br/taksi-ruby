@@ -26,19 +26,11 @@ RSpec.describe ::Taksi::Components::Field do
   end
 
   context 'when with dynamic fields' do
-    let(:argument) { [::Taksi::Dynamic, 'dynamic_path'] }
+    let(:argument) { [::Taksi::Dynamic] }
 
     context '#as_json' do
       it 'serializes correctly' do
         expect(subject.as_json).to eq({dummy: nil})
-      end
-
-      context 'with empty path' do
-        let(:argument) { [::Taksi::Dynamic] }
-
-        it 'creates a parameter path' do
-          expect(subject.as_json).to eq({dummy: nil})
-        end
       end
     end
 
@@ -47,6 +39,72 @@ RSpec.describe ::Taksi::Components::Field do
 
       it 'return the related data to the key' do
         expect(subject.fetch_from(data)).to eq('the_right_data')
+      end
+
+      context 'when data for field do not exists' do
+        it 'fails with error' do
+          expect { subject.fetch_from({}) }.to raise_error(KeyError, "Couldn't fetch :dummy from data: {}")
+        end
+      end
+    end
+  end
+
+  describe '#field' do
+    subject { described_class.new(skeleton, key) {} }
+
+    context 'when static' do
+      it 'created a sub field' do
+        new_field = subject.field(:name, ::Taksi::Values::Static, 'static')
+
+        expect(new_field).to be_kind_of(::Taksi::Components::Field)
+        expect(new_field.name).to eq(:name)
+        expect(new_field.value).to be_kind_of(Taksi::Values::Static)
+        expect(new_field.value.value).to eq('static')
+      end
+
+      it 'works the same from shortcut' do
+        new_field = subject.static(:name, 'static')
+
+        expect(new_field).to be_kind_of(::Taksi::Components::Field)
+        expect(new_field.name).to eq(:name)
+        expect(new_field.value).to be_kind_of(Taksi::Values::Static)
+        expect(new_field.value.value).to eq('static')
+      end
+    end
+
+    context 'when dynamic' do
+      it 'created a sub field' do
+        new_field = subject.field(:name, ::Taksi::Values::Dynamic)
+
+        expect(new_field).to be_kind_of(::Taksi::Components::Field)
+        expect(new_field.name).to eq(:name)
+        expect(new_field.value).to be_kind_of(Taksi::Values::Dynamic)
+      end
+
+      it 'works the same from shortcut' do
+        new_field = subject.dynamic(:name)
+
+        expect(new_field).to be_kind_of(::Taksi::Components::Field)
+        expect(new_field.name).to eq(:name)
+        expect(new_field.value).to be_kind_of(Taksi::Values::Dynamic)
+      end
+    end
+
+    context 'when nested' do
+      it 'created a sub field' do
+        new_field = subject.field(:name) { static(:nested_field, 'nested_value') }
+
+        expect(new_field).to be_kind_of(::Taksi::Components::Field)
+        expect(new_field.name).to eq(:name)
+        expect(new_field.value).to eq(nil)
+      end
+
+      it 'works the same from shortcut' do
+        new_field = subject.nested(:name) { static(:nested_field, 'nested_value') }
+
+        expect(new_field).to be_kind_of(::Taksi::Components::Field)
+        expect(new_field.name).to eq(:name)
+        expect(new_field.value).to eq(nil)
       end
     end
   end
