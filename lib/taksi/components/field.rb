@@ -24,19 +24,19 @@ module Taksi
       def key
         return name if parent.nil? || parent.root?
 
-        "#{parent.name}.#{name}"
+        "#{parent.key}.#{name}"
       end
 
       # Fetches the data for in `data` for the current field
       # @return any
       def fetch_from(data)
-        return value.as_json if value.static?
+        return value.as_json if value && value.static?
 
         return data[name] if parent.nil? || parent.root?
 
         parent.fetch_from(data)[name]
       rescue NoMethodError
-        raise NameError, "Couldn't fetch #{key.inspect} from data: #{data.inspect}"
+        raise NameError, "Couldn't fetch #{name.inspect} from data: #{data.inspect}"
       end
 
       # Turns the field into his json representation

@@ -4,6 +4,8 @@ module Taksi
   class Registry
     include ::Singleton
 
+    NAME_REGEX = /^[a-z\-\_\/]{1,80}$/i
+
     class << self
       extend ::Forwardable
 
@@ -18,6 +20,8 @@ module Taksi
     end
 
     def add(klass, name)
+      raise StandardError, "Invalid interface name '#{name}', it must to match regex '#{NAME_REGEX.inspect}'" unless name.to_s.match?(NAME_REGEX)
+
       sym_name = name.to_sym
 
       @interfaces[sym_name] ||= []

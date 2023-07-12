@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe ::Taksi::Component do
   subject { DummyComponent.new(interface) }
 
-  let(:interface) { DummyInterface.new }
+  let(:interface) { DummyInterface }
 
   before do
     class DummyComponent
@@ -73,14 +73,15 @@ RSpec.describe ::Taksi::Component do
     before do
       class DummyComponent
         content do
-          title ::Taksi::Dynamic, 'dynamic_value.path'
+          title ::Taksi::Dynamic
 
-          nested do
+          first_level do
             type ::Taksi::Static, 'dummy_static_value'
-            title ::Taksi::Dynamic, 'dynamic_value.path'
+            title ::Taksi::Dynamic
 
-            too_nested do
+            second_level do
               again ::Taksi::Static, 'dummy_static_value'
+              other ::Taksi::Dynamic
             end
           end
         end
@@ -95,15 +96,49 @@ RSpec.describe ::Taksi::Component do
                                                requires_data: true,
                                                content: {
                                                  title: nil,
-                                                 nested: {
+                                                 first_level: {
                                                    type: 'dummy_static_value',
                                                    title: nil,
-                                                   too_nested: {
-                                                     again: 'dummy_static_value'
+                                                   second_level: {
+                                                     again: 'dummy_static_value',
+                                                     other: nil
                                                    }
                                                  }
                                                }
                                              })
+    end
+
+    context 'when fetching data' do
+      subject { DummyComponent.new(interface, with: :datasource) }
+
+      before do
+        class DummyInterface
+          def datasource
+            {
+              first_level: {
+                title: 'Dynamic data',
+                second_level: {
+                  other: 'More dynamic data'
+                }
+              }
+            }
+          end
+        end
+      end
+
+      it 'fetches data correctly' do
+        expect(subject.content_for(interface.new)).to eq({
+          title: nil,
+          first_level: {
+            type: 'dummy_static_value',
+            title: 'Dynamic data',
+            second_level: {
+              again: 'dummy_static_value',
+              other: 'More dynamic data'
+            }
+          }
+        })
+      end
     end
   end
 end
