@@ -10,7 +10,7 @@ RSpec.describe ::Taksi::Interface do
       include ::Taksi::Component.new('dummy/component')
 
       content do
-        title Taksi::Dynamic
+        field :title, Taksi::Dynamic
       end
     end
 

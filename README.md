@@ -22,12 +22,13 @@ class Components::Users::ProfileResume
   include Taksi::Component.new('users/profile_resume')
 
   content do
-    name Taksi::Dynamic
-    profile_kind Taksi::Static, 'resume'
+    static :profile_kind, 'resume' # same as `field :profile_kind, Taksi::Static`
 
-    details do
-      age Taksi::Dynamic
-      email Taksi::Dynamic
+    dynamic :name
+
+    field :details do
+      field :age Taksi::Dynamic # same as `dynamic :age`
+      field :email Taksi::Dynamic
     end
   end
 end

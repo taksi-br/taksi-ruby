@@ -18,7 +18,6 @@ module Taksi
         @nested_fields = []
 
         instance_exec(&block) if block_given?
-        @defined = true
       end
 
       def key
@@ -76,16 +75,22 @@ module Taksi
         @value.dynamic?
       end
 
-      def method_missing(name, *args, &block)
-        return super if @defined
-
-        @nested_fields << self.class.new(skeleton, name, *args, parent: self, &block)
+      def field(name, *args, &block)
+        self.class.new(skeleton, name, *args, parent: self, &block).tap do |new_field|
+          @nested_fields << new_field
+        end
       end
 
-      def respond_to_missing?(name, *)
-        return super if @defined
+      def nested(name, &block)
+        field(name, &block)
+      end
 
-        true
+      def static(name, value)
+        field(name, ::Taksi::Values::Static, value)
+      end
+
+      def dynamic(name)
+        field(name, ::Taksi::Values::Dynamic)
       end
     end
   end

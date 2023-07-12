@@ -48,9 +48,8 @@ RSpec.describe ::Taksi::Component do
     before do
       class DummyComponent
         content do
-          type ::Taksi::Static, 'dummy_static_value'
-          title ::Taksi::Dynamic, 'dynamic_value.path'
-          # value ::Taksi::Parameter, 'dummy_parameter'
+          field :type, ::Taksi::Static, 'dummy_static_value'
+          field :title, ::Taksi::Dynamic, 'dynamic_value.path'
         end
       end
     end
@@ -73,15 +72,15 @@ RSpec.describe ::Taksi::Component do
     before do
       class DummyComponent
         content do
-          title ::Taksi::Dynamic
+          field :title, ::Taksi::Dynamic
 
-          first_level do
-            type ::Taksi::Static, 'dummy_static_value'
-            title ::Taksi::Dynamic
+          field :first_level do
+            field :type, ::Taksi::Static, 'dummy_static_value'
+            field :title, ::Taksi::Dynamic
 
-            second_level do
-              again ::Taksi::Static, 'dummy_static_value'
-              other ::Taksi::Dynamic
+            field :second_level do
+              static :again, 'dummy_static_value'
+              dynamic :other
             end
           end
         end
