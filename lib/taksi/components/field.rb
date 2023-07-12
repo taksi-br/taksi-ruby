@@ -31,11 +31,11 @@ module Taksi
       def fetch_from(data)
         return value.as_json if value&.static?
 
-        return data[name] if parent.nil? || parent.root?
+        return data.fetch(name) if parent.nil? || parent.root?
 
-        parent.fetch_from(data)[name]
-      rescue NoMethodError
-        raise NameError, "Couldn't fetch #{name.inspect} from data: #{data.inspect}"
+        parent.fetch_from(data).fetch(name)
+      rescue ::KeyError
+        raise ::KeyError, "Couldn't fetch #{key.inspect} from data: #{data.inspect}"
       end
 
       # Turns the field into his json representation

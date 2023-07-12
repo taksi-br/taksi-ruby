@@ -49,7 +49,7 @@ RSpec.describe ::Taksi::Component do
       class DummyComponent
         content do
           field :type, ::Taksi::Static, 'dummy_static_value'
-          field :title, ::Taksi::Dynamic, 'dynamic_value.path'
+          field :title, ::Taksi::Dynamic
         end
       end
     end
@@ -114,6 +114,7 @@ RSpec.describe ::Taksi::Component do
         class DummyInterface
           def datasource
             {
+              title: 'First dynamic data',
               first_level: {
                 title: 'Dynamic data',
                 second_level: {
@@ -127,7 +128,7 @@ RSpec.describe ::Taksi::Component do
 
       it 'fetches data correctly' do
         expect(subject.content_for(interface.new)).to eq({
-                                                           title: nil,
+                                                           title: 'First dynamic data',
                                                            first_level: {
                                                              type: 'dummy_static_value',
                                                              title: 'Dynamic data',

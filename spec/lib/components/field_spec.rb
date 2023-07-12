@@ -26,19 +26,11 @@ RSpec.describe ::Taksi::Components::Field do
   end
 
   context 'when with dynamic fields' do
-    let(:argument) { [::Taksi::Dynamic, 'dynamic_path'] }
+    let(:argument) { [::Taksi::Dynamic] }
 
     context '#as_json' do
       it 'serializes correctly' do
         expect(subject.as_json).to eq({dummy: nil})
-      end
-
-      context 'with empty path' do
-        let(:argument) { [::Taksi::Dynamic] }
-
-        it 'creates a parameter path' do
-          expect(subject.as_json).to eq({dummy: nil})
-        end
       end
     end
 
@@ -47,6 +39,12 @@ RSpec.describe ::Taksi::Components::Field do
 
       it 'return the related data to the key' do
         expect(subject.fetch_from(data)).to eq('the_right_data')
+      end
+
+      context 'when data for field do not exists' do
+        it 'fails with error' do
+          expect { subject.fetch_from({}) }.to raise_error(KeyError, "Couldn't fetch :dummy from data: {}")
+        end
       end
     end
   end

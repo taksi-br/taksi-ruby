@@ -3,18 +3,11 @@
 module Taksi
   module Values
     class Dynamic
-      attr_reader :component, :name, :field
+      attr_reader :component, :name
 
-      def initialize(component, name, field = nil)
+      def initialize(component, name)
         @component = component
         @name = name
-        @field = field
-      end
-
-      def path
-        return field if field
-
-        "#{component.id}.#{name}"
       end
 
       def as_json
