@@ -78,6 +78,10 @@ RSpec.describe ::Taksi::Component do
           nested do
             type ::Taksi::Static, 'dummy_static_value'
             title ::Taksi::Dynamic, 'dynamic_value.path'
+
+            too_nested do
+              again ::Taksi::Static, 'dummy_static_value'
+            end
           end
         end
       end
@@ -93,7 +97,10 @@ RSpec.describe ::Taksi::Component do
                                                  title: nil,
                                                  nested: {
                                                    type: 'dummy_static_value',
-                                                   title: nil
+                                                   title: nil,
+                                                   too_nested: {
+                                                    again: 'dummy_static_value',
+                                                   }
                                                  }
                                                }
                                              })

@@ -36,7 +36,7 @@ module Taksi
       attr_reader :skeleton
 
       def find(version, alternative = nil)
-        ::Taksi::Registry.find(interface_name, version, alternative)
+        ::Taksi::Registry.find(@interface_definition.interface_name, version, alternative)
       end
 
       def initiate(interface_definition)
