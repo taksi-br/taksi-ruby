@@ -1,9 +1,17 @@
 # frozen_string_literal: true
 
 module Taksi
+  # A custom module that turns a class into a interface on taksi protocol
+  #
   class Interface < ::Module
     attr_reader :interface_name, :version_pattern, :alternatives
 
+    # Finds for a interface by its name and the current version
+    # @param name [String]
+    # @param version [String] just like '0.2.1'
+    # @param alternatives: [Array]
+    # @raises`::Taksi::Registry::InterfaceNotFoundError`
+    # @return Class the class of interface
     def self.find(name, version, alternative: nil)
       ::Taksi::Registry.find(name, version, alternative)
     end
@@ -28,7 +36,7 @@ module Taksi
       attr_reader :skeleton
 
       def find(version, alternative = nil)
-        ::Taksi::Registry.find(interface_name, version, alternative)
+        ::Taksi::Registry.find(@interface_definition.interface_name, version, alternative)
       end
 
       def initiate(interface_definition)

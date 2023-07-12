@@ -9,6 +9,8 @@ module Taksi
         @parent = parent
         @name = name
 
+        raise 'To build a component you need to provide a `content` block' unless block_given?
+
         @content = ::Taksi::Components::Field.new(self, :content, &block)
       end
 
@@ -20,10 +22,15 @@ module Taksi
         content.fields
       end
 
+      def dynamic?
+        @content.dynamic?
+      end
+
       def as_json
         {
           name: name,
-          identifier: id
+          identifier: id,
+          requires_data: dynamic?
         }.tap do |json|
           json.merge!(content.as_json)
         end

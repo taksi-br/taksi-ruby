@@ -6,7 +6,7 @@ RSpec.describe ::Taksi::Components::Field do
   subject { described_class.new(skeleton, key, *argument) }
 
   let(:interface_skeleton) { ::Taksi::Interfaces::Skeleton.new }
-  let(:skeleton) { interface_skeleton.create_component('dummy_component') }
+  let(:skeleton) { interface_skeleton.create_component('dummy_component') {} }
   let(:key) { :dummy }
 
   context 'when with static fields' do

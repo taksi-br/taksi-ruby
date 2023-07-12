@@ -10,6 +10,8 @@ RSpec.describe ::Taksi::Component do
   before do
     class DummyComponent
       include ::Taksi::Component.new('dummy/component')
+
+      content {}
     end
 
     class DummyInterface
@@ -36,6 +38,7 @@ RSpec.describe ::Taksi::Component do
       expect(subject.skeleton.as_json).to eq({
                                                name: 'dummy/component',
                                                identifier: 'component$0',
+                                               requires_data: false,
                                                content: {}
                                              })
     end
@@ -57,6 +60,7 @@ RSpec.describe ::Taksi::Component do
       expect(subject.skeleton.as_json).to eq({
                                                name: 'dummy/component',
                                                identifier: 'component$0',
+                                               requires_data: true,
                                                content: {
                                                  type: 'dummy_static_value',
                                                  title: nil
@@ -74,6 +78,10 @@ RSpec.describe ::Taksi::Component do
           nested do
             type ::Taksi::Static, 'dummy_static_value'
             title ::Taksi::Dynamic, 'dynamic_value.path'
+
+            too_nested do
+              again ::Taksi::Static, 'dummy_static_value'
+            end
           end
         end
       end
@@ -84,11 +92,15 @@ RSpec.describe ::Taksi::Component do
       expect(subject.skeleton.as_json).to eq({
                                                name: 'dummy/component',
                                                identifier: 'component$0',
+                                               requires_data: true,
                                                content: {
                                                  title: nil,
                                                  nested: {
                                                    type: 'dummy_static_value',
-                                                   title: nil
+                                                   title: nil,
+                                                   too_nested: {
+                                                     again: 'dummy_static_value'
+                                                   }
                                                  }
                                                }
                                              })

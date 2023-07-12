@@ -1,6 +1,18 @@
 # frozen_string_literal: true
 
 module Taksi
+  # A custom module to turn a class into a component on taksi protocol
+  #
+  # ```ruby
+  #   class CustomComponent
+  #     include Taksi::Component.new('customs/component_name')
+  #
+  #     content do
+  #       field_name Taksi::Static
+  #     end
+  #   end
+  # ```
+  #
   class Component < ::Module
     attr_reader :identifier
 

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'forwardable'
 module Taksi
   class Registry
     include ::Singleton
@@ -41,7 +40,7 @@ module Taksi
 
         next true if alternative.nil?
 
-        next true if interface.alternatives.blank?
+        next true if interface.alternatives.nil?
 
         next true if interface.alternatives.include?(alternative)
 

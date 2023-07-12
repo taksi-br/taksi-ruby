@@ -15,7 +15,7 @@ RSpec.describe ::Taksi::Interface do
     end
 
     class DummyInterface
-      include ::Taksi::Interface.new('dummy-interface', '> 1.0')
+      include ::Taksi::Interface.new('dummy-interface', '~> 1.0')
 
       add DummyComponent, with: :dummy_data
 
@@ -40,6 +40,80 @@ RSpec.describe ::Taksi::Interface do
         expect { described_class.find('dummy-interface', '0.3') }.to raise_error(Taksi::Registry::InterfaceNotFoundError)
       end
     end
+
+    context 'when using interface shortcut' do
+      before do
+        class DummyInterfaceV2
+          include ::Taksi::Interface.new('dummy-interface', '~> 2.0')
+
+          add DummyComponent, with: :dummy_data
+
+          def dummy_data
+            {title: 'dummy_value'}
+          end
+        end
+      end
+
+      after do
+        Object.send(:remove_const, :DummyInterfaceV2)
+      end
+
+      it 'finds same interface but in other version' do
+        expect(DummyInterface.find('2.3')).to eq(DummyInterfaceV2)
+        expect(described_class.find('dummy-interface', '2.3')).to eq(DummyInterfaceV2)
+      end
+    end
+
+    context 'when looking for an alternative' do
+      before do
+        class DummyInterfaceV2
+          include ::Taksi::Interface.new('dummy-interface', '~> 2.0', alternatives: %w[A B])
+
+          add DummyComponent, with: :dummy_data
+
+          def dummy_data
+            {title: 'dummy_value'}
+          end
+        end
+
+        class DummyInterfaceV2Other
+          include ::Taksi::Interface.new('dummy-interface', '~> 2.0', alternatives: ['C'])
+
+          add DummyComponent, with: :dummy_data
+
+          def dummy_data
+            {title: 'dummy_value'}
+          end
+        end
+      end
+
+      after do
+        Object.send(:remove_const, :DummyInterfaceV2)
+        Object.send(:remove_const, :DummyInterfaceV2Other)
+      end
+
+      it 'finds same interface but in other version' do
+        expect(DummyInterface.find('2.3', 'A')).to eq(DummyInterfaceV2)
+        expect(described_class.find('dummy-interface', '2.3', alternative: 'A')).to eq(DummyInterfaceV2)
+        expect(DummyInterfaceV2Other.find('2.3', 'A')).to eq(DummyInterfaceV2)
+        expect(DummyInterfaceV2.find('2.3', 'C')).to eq(DummyInterfaceV2Other)
+        expect(DummyInterface.find('2.3', 'C')).to eq(DummyInterfaceV2Other)
+        expect(described_class.find('dummy-interface', '2.3', alternative: 'C')).to eq(DummyInterfaceV2Other)
+      end
+
+      context 'when interface has no alternative' do
+        it 'fits any alternative' do
+          expect(described_class.find('dummy-interface', '1.3', alternative: 'A')).to eq(DummyInterface)
+          expect(DummyInterface.find('1.3', alternative: 'ANY')).to eq(DummyInterface)
+        end
+      end
+
+      context 'when alternative cannot be found' do
+        it 'raises an error' do
+          expect { described_class.find('dummy-interface', '2.3', alternative: 'ANY') }.to raise_error(Taksi::Registry::InterfaceNotFoundError)
+        end
+      end
+    end
   end
 
   describe '#skeleton' do
@@ -52,6 +126,7 @@ RSpec.describe ::Taksi::Interface do
                                          {
                                            name: 'dummy/component',
                                            identifier: 'component$0',
+                                           requires_data: true,
                                            content: {
                                              title: nil
                                            }
