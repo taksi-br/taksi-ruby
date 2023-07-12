@@ -67,7 +67,7 @@ RSpec.describe ::Taksi::Interface do
     context 'when looking for an alternative' do
       before do
         class DummyInterfaceV2
-          include ::Taksi::Interface.new('dummy-interface', '~> 2.0', alternatives: ['A', 'B'])
+          include ::Taksi::Interface.new('dummy-interface', '~> 2.0', alternatives: %w[A B])
 
           add DummyComponent, with: :dummy_data
 

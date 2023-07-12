@@ -10,7 +10,9 @@ module Taksi
         @name = name.to_sym
         @parent = parent
 
-        raise 'You must provide a value or a block definition to build field' unless args.size.positive? || block_given?
+        raise <<~MESSAGE unless args.size.positive? || block_given?
+          You must provide a value or a block definition to build field
+        MESSAGE
 
         @value = args.shift.new(skeleton, name, *args) if args.size.positive?
         @nested_fields = []

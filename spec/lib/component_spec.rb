@@ -11,7 +11,7 @@ RSpec.describe ::Taksi::Component do
     class DummyComponent
       include ::Taksi::Component.new('dummy/component')
 
-      content { }
+      content {}
     end
 
     class DummyInterface
@@ -99,7 +99,7 @@ RSpec.describe ::Taksi::Component do
                                                    type: 'dummy_static_value',
                                                    title: nil,
                                                    too_nested: {
-                                                    again: 'dummy_static_value',
+                                                     again: 'dummy_static_value'
                                                    }
                                                  }
                                                }
