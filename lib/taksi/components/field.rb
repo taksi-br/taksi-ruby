@@ -29,7 +29,7 @@ module Taksi
       # Fetches the data for in `data` for the current field
       # @return any
       def fetch_from(data)
-        return value.as_json if value && value.static?
+        return value.as_json if value&.static?
 
         return data[name] if parent.nil? || parent.root?
 

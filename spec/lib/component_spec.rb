@@ -127,16 +127,16 @@ RSpec.describe ::Taksi::Component do
 
       it 'fetches data correctly' do
         expect(subject.content_for(interface.new)).to eq({
-          title: nil,
-          first_level: {
-            type: 'dummy_static_value',
-            title: 'Dynamic data',
-            second_level: {
-              again: 'dummy_static_value',
-              other: 'More dynamic data'
-            }
-          }
-        })
+                                                           title: nil,
+                                                           first_level: {
+                                                             type: 'dummy_static_value',
+                                                             title: 'Dynamic data',
+                                                             second_level: {
+                                                               again: 'dummy_static_value',
+                                                               other: 'More dynamic data'
+                                                             }
+                                                           }
+                                                         })
       end
     end
   end

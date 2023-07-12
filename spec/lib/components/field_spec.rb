@@ -52,7 +52,7 @@ RSpec.describe ::Taksi::Components::Field do
   end
 
   describe '#field' do
-  subject { described_class.new(skeleton, key) { } }
+    subject { described_class.new(skeleton, key) {} }
 
     context 'when static' do
       it 'created a sub field' do
