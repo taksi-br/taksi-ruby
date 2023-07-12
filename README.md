@@ -23,6 +23,7 @@ class Components::Users::ProfileResume
 
   content do
     name Taksi::Dynamic
+    profile_kind Taksi::Static, 'resume'
 
     details do
       age Taksi::Dynamic
@@ -69,8 +70,10 @@ Which provide us:
     {
       "name": "users/profile_resume",
       "identifier": "component$0",
+      "requires_data": true,
       "content": {
         "name": null,
+        "profile_kind": "resume",
         "details": {
           "age": null,
           "email": null
