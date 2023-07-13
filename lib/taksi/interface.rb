@@ -67,6 +67,7 @@ module Taksi
 
       def initialize(**options)
         @options = options.freeze
+        super()
       end
 
       def skeleton
