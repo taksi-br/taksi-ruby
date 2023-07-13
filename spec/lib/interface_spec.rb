@@ -149,5 +149,32 @@ RSpec.describe ::Taksi::Interface do
         }
       ])
     end
+
+    context 'when pass options to interface' do
+      subject { DummyInterface.new(**options) }
+
+      let(:options) { {custom_option_data: 'custom_option_data_value'} }
+
+      before do
+        class DummyInterface
+          def dummy_data
+            {title: options[:custom_option_data]}
+          end
+        end
+      end
+
+      it 'returns the interface data' do
+        interface_data = subject.data
+
+        expect(interface_data).to eq([
+          {
+            identifier: 'component$0',
+            content: {
+              title: 'custom_option_data_value'
+            }
+          }
+        ])
+      end
+    end
   end
 end

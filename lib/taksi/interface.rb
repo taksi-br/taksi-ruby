@@ -63,6 +63,12 @@ module Taksi
     end
 
     module InstanceMethods
+      attr_reader :options
+
+      def initialize(**options)
+        @options = options.freeze
+      end
+
       def skeleton
         self.class.skeleton
       end
