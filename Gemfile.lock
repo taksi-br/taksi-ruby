@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    taksi (0.2.4)
+    taksi (0.2.5)
 
 GEM
   remote: https://rubygems.org/
