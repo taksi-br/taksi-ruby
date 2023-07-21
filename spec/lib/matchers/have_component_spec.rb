@@ -73,11 +73,15 @@ RSpec.describe ::Taksi::Matchers::HaveComponent do
       it 'gives an error failure_message' do
         expect(subject).not_to be_matches(interface)
 
-        expect(subject.failure_message).to eq(<<~MESSAGE)
+        expect(subject.failure_message.gsub(/\e\[(\d+)m/, '')).to eq(<<~MESSAGE)
           Expected component DummyComponent ('dummy/component') was found but with different contents:
 
           Content diff for component 'component$0' ('dummy/component'):
-            \e[0m\n\e[0m\e[34m@@ -1 +1 @@\n\e[0m\e[31m-:wrong_field => \"dummy_value\",\n\e[0m\e[32m+:title => \"dummy_value\",\n\e[0m
+          \s\s
+          @@ -1 +1 @@
+          -:wrong_field => "dummy_value",
+          +:title => "dummy_value",
+
 
         MESSAGE
       end
