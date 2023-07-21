@@ -28,7 +28,7 @@ RSpec.describe ::Taksi::Component do
     subject { DummyComponent }
 
     it 'set ups right readers' do
-      expect(subject.identifier).to eq('dummy/component')
+      expect(subject.component_name).to eq('dummy/component')
     end
   end
 

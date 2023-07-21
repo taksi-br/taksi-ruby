@@ -21,19 +21,23 @@ module Taksi
       end
 
       def key
-        return name if parent.nil? || parent.root?
+        return name if root?
 
         "#{parent.key}.#{name}"
       end
 
       # Fetches the data for in `data` for the current field
       # @return any
-      def fetch_from(data)
+      def fetch(data)
         return value.as_json if value&.static?
 
-        return data.fetch(name) if parent.nil? || parent.root?
+        current_data = data.fetch(name)
 
-        parent.fetch_from(data).fetch(name)
+        return current_data unless children?
+
+        @nested_fields.each_with_object({}) do |field, obj|
+          obj[field.name] = field.fetch(current_data)
+        end
       rescue ::KeyError
         raise ::KeyError, "Couldn't fetch #{key.inspect} from data: #{data.inspect}"
       end
@@ -59,6 +63,10 @@ module Taksi
             end
           end
         end
+      end
+
+      def children?
+        !@nested_fields.empty?
       end
 
       def nested?

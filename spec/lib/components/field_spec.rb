@@ -3,11 +3,11 @@
 require 'spec_helper'
 
 RSpec.describe ::Taksi::Components::Field do
-  subject { described_class.new(skeleton, key, *argument) }
+  subject { described_class.new(skeleton, name, *argument) }
 
   let(:interface_skeleton) { ::Taksi::Interfaces::Skeleton.new }
   let(:skeleton) { interface_skeleton.create_component('dummy_component') {} }
-  let(:key) { :dummy }
+  let(:name) { :dummy }
 
   context 'when with static fields' do
     let(:argument) { [::Taksi::Static, 'Static Random Value'] }
@@ -18,9 +18,9 @@ RSpec.describe ::Taksi::Components::Field do
       end
     end
 
-    context '#fetch_from' do
+    context '#fetch' do
       it 'returns the static data' do
-        expect(subject.fetch_from({})).to eq('Static Random Value')
+        expect(subject.fetch({})).to eq('Static Random Value')
       end
     end
   end
@@ -34,23 +34,23 @@ RSpec.describe ::Taksi::Components::Field do
       end
     end
 
-    context '#fetch_from' do
+    context '#fetch' do
       let(:data) { {dummy: 'the_right_data'} }
 
-      it 'return the related data to the key' do
-        expect(subject.fetch_from(data)).to eq('the_right_data')
+      it 'return the related data to the name' do
+        expect(subject.fetch(data)).to eq('the_right_data')
       end
 
       context 'when data for field do not exists' do
         it 'fails with error' do
-          expect { subject.fetch_from({}) }.to raise_error(KeyError, "Couldn't fetch :dummy from data: {}")
+          expect { subject.fetch({}) }.to raise_error(KeyError, "Couldn't fetch :dummy from data: {}")
         end
       end
     end
   end
 
   describe '#field' do
-    subject { described_class.new(skeleton, key) {} }
+    subject { described_class.new(skeleton, name) {} }
 
     context 'when static' do
       it 'created a sub field' do

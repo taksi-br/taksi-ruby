@@ -14,10 +14,10 @@ module Taksi
   # ```
   #
   class Component < ::Module
-    attr_reader :identifier
+    attr_reader :component_name
 
-    def initialize(identifier)
-      @identifier = identifier
+    def initialize(component_name)
+      @component_name = component_name
       super()
     end
 
@@ -35,8 +35,8 @@ module Taksi
         @component_definition = component_definition
       end
 
-      def identifier
-        @component_definition.identifier
+      def component_name
+        @component_definition.component_name
       end
 
       def content(&block)
@@ -51,34 +51,27 @@ module Taksi
       def initialize(interface_definition, with: nil)
         @interface_definition = interface_definition
         @datasource = with
-        @skeleton = @interface_definition.skeleton.create_component(self.class.identifier,
+        @skeleton = @interface_definition.skeleton.create_component(self.class.component_name,
                                                                     &self.class.content_builder)
         super()
       end
 
-      def id
+      def name
+        self.class.component_name
+      end
+
+      def identifier
         @skeleton.id
       end
 
       def content_for(interface)
         data = interface.send(datasource)
 
-        skeleton.fields.each_with_object({}) do |field, obj|
-          load_data_from_key_to_object(data, field, obj)
-        end
+        fetch(data)
       end
 
-      private
-
-      def load_data_from_key_to_object(data, field, obj)
-        splitted_full_path = field.key.to_s.split('.')
-        setter_key = splitted_full_path.pop
-
-        relative_object = splitted_full_path.reduce(obj) do |memo, path_part|
-          memo[path_part.to_sym] ||= {}
-        end
-
-        relative_object[setter_key.to_sym] = field.fetch_from(data)
+      def fetch(data)
+        skeleton.content.fetch({content: data})
       end
     end
   end
