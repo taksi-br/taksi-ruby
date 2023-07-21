@@ -70,14 +70,18 @@ module Taksi
         super()
       end
 
+      def components
+        self.class.components
+      end
+
       def skeleton
         self.class.skeleton
       end
 
       def data
-        self.class.components.map do |component|
+        components.map do |component|
           {
-            identifier: component.id,
+            identifier: component.identifier,
             content: component.content_for(self)
           }
         end
